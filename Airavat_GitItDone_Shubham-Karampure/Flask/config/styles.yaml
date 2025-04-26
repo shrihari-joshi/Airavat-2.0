@@ -1,0 +1,30 @@
+manga:
+  name: "Manga Style"
+  characteristics: >
+    Large, expressive eyes; Iconic facial features; Speed lines for action;
+    Vertical panel orientation; Symbolic emotional icons (e.g., sweat drops); 
+    Limited color or grayscale; Cinematic angles; Focused on drama and emotion.
+
+marvel:
+  name: "Marvel Style"
+  characteristics: >
+    Realistic anatomy with heroic exaggeration; Dynamic action poses;
+    Strong contrast in inking and shading; Consistent color palettes for characters;
+    Complex panel compositions; Introspective narration; Superpowered themes;
+    Modern digital coloring with gradient effects.
+
+dc:
+  name: "DC Style"
+  characteristics: >
+    Bold, iconic character designs; High drama and mythic tone;
+    Sharp inking and clean linework; Strong use of shadows;
+    Vibrant, uniform costume colors; Epic storytelling structures;
+    Classic paneling with dramatic angles and narration-heavy boxes.
+
+indie:
+  name: "Indie Comic Style"
+  characteristics: >
+    Experimental layouts and storytelling; Unique or stylized character designs;
+    Often minimalistic or non-mainstream palettes; Emotionally raw or introspective tone;
+    Artistic flexibility—ranging from sketchy to hyper-detailed;
+    Often creator-driven aesthetics that reflect personal voice or theme.

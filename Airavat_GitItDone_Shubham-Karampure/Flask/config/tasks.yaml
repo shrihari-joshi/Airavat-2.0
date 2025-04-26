@@ -1,0 +1,211 @@
+# TASK DEFINITIONS
+research_task:
+  description: >
+    Research the Wikipedia article on "{{topic}}" and extract the most essential information
+    for educational comic adaptation.
+
+    REQUIREMENTS:
+    - Maximum length: 300 words
+    - Reading level: Appropriate for {{complexity_level}}
+    - Must include:
+      * Precise definition (1-2 sentences)
+      * 3-5 key principles or components that define the topic
+      * 1-2 real-world applications or examples
+      * Historical context or development (1-2 sentences)
+    
+    EXCLUDE:
+    - Tangential information
+    - Excessive technical details
+    - Controversial interpretations
+    - Citations and references
+  
+  expected_output: >
+    A concise, factual summary structured with clear headings:
+    
+    # CORE DEFINITION
+    [1-2 sentence definition]
+    
+    # KEY COMPONENTS
+    - [Component 1]
+    - [Component 2]
+    - [Component 3]
+    
+    # APPLICATIONS
+    [1-2 concrete examples]
+    
+    # HISTORICAL CONTEXT
+    [Brief historical development]
+
+simplify_task:
+  description: >
+    Transform the research information into content optimized for the specified audience.
+    # ... (Target Audience, Requirements, Constraints remain the same) ...
+  expected_output: >
+    A simplified version of the research text, ready for scripting:
+
+    # SIMPLIFIED EXPLANATION
+    [Main content adapted for target audience and domain]
+
+    # KEY TAKEAWAYS
+    - [Takeaway 1]
+    - [Takeaway 2]
+    - [Takeaway 3]
+
+    # AUDIENCE-RELEVANT EXAMPLES
+    [Examples tailored to target audience and domain]
+
+script_and_style_task:
+    description: >
+      Create a structured educational comic script in a clear **textual format**, **suggesting character archetypes/names fitting the '{{comic_style}}'**, and provide guidance on adapting the script's visual elements to that style, considering these characteristics: {{style_characteristics}}.
+
+      REQUIREMENTS:
+      - Generate structured textual output using clear headings and delimiters.
+      - **Suggest 2-3 potential character names or archetypes** suitable for the '{{comic_style}}' and the topic, placing them in a dedicated section.
+      - Create approximately 4-6 chapters (adjust based on content flow).
+      - Include sections for: Comic Topic, Total Chapters, Comic Style, Style Specific Character Suggestions, Style Adaptation Guidance, and for each chapter: Chapter Number, Chapter Title, Narration Box, Chat Bubbles (list of speaker/dialogue pairs, using suggested or appropriate character names), Conclusion, and a concise 2-3 line Image Context description.
+      - Structure the narrative logically with an educational focus.
+      - Maintain the original educational content and intent.
+      - Ensure that the chapters have proper flow and cover all the educational content upon completion.
+      - Provide brief guidance on visual style adaptation relevant to '{{comic_style}}'.
+      - Image Context should specifically incorporate visual elements of the chosen comic style.
+
+    expected_output: >
+      A structured textual representation of the comic script including character suggestions and style guidance. Example format:
+
+      ```text
+      COMIC_TOPIC: {{topic}}
+      TOTAL_CHAPTERS: 4
+      COMIC_STYLE: {{comic_style}}
+
+      STYLE_SPECIFIC_CHARACTER_SUGGESTIONS:
+      - Archetype/Name 1 (e.g., Curious Student - 'Akira' if manga, 'Peter Parker' if marvel, 'Clark Kent' if dc, 'Milo' if indie)
+      - Archetype/Name 2 (e.g., Knowledgeable Guide - 'Professor Kenji' if manga, 'Tony Stark' if marvel, 'Bruce Wayne' if dc, 'Professor Luna' if indie)
+      - Archetype/Name 3 (Optional - e.g., Skeptic Friend)
+
+      STYLE_ADAPTATION_GUIDANCE:
+      - [Brief point 1 about visual style adaptation for {{comic_style}}, e.g., Panel layout, line art, character expressions]
+      - [Brief point 2...]
+
+      --- CHAPTER 1 ---
+      CHAPTER_NUMBER: 1
+      CHAPTER_TITLE: Chapter 1: Introduction to...
+      NARRATION_BOX: [Narrator sets the scene...]
+      CHAT_BUBBLES:
+      - CHARACTER: [Suggested Character Name 1]
+        DIALOGUE: Wow, what is this?
+      - CHARACTER: [Suggested Character Name 2]
+        DIALOGUE: This explains the core concept...
+      CONCLUSION: [Brief summary of chapter 1's key point]
+      IMAGE_CONTEXT: [2-3 line description of the visual scene, mood, key elements for the panel, explicitly mentioning how {{comic_style}} visual features should influence it.]
+
+      --- CHAPTER 2 ---
+      CHAPTER_NUMBER: 2
+      CHAPTER_TITLE: ...
+      NARRATION_BOX: ...
+      CHAT_BUBBLES:
+      - CHARACTER: [Character Name]
+        DIALOGUE: ...
+      CONCLUSION: ...
+      IMAGE_CONTEXT: ...
+
+      # ... more chapters ...
+      ```
+
+review_task:
+  description: >
+    Review the provided structured text comic script **strictly for factual errors** and **correct them directly within the text**. Ensure the original structure (headings, chapters, fields like NARRATION_BOX, CHAT_BUBBLES, etc.) is perfectly maintained.
+
+  REQUIREMENTS:
+    - Input: Structured text script (output of `script_task`).
+    - Identify any scientifically, historically, or generally factual inaccuracies in the content (narration, dialogue, conclusion, etc.).
+    - Correct identified errors directly in the text.
+    - Crucially preserve the exact textual structure and formatting** (e.g., `--- CHAPTER X ---`, `NARRATION_BOX:`, indentation in `CHAT_BUBBLES`).
+    - If no errors are found, return the original script unchanged.
+    - Do NOT add comments, annotations, or reports. Only output the corrected (or original, if no errors) script text.
+
+  expected_output: >
+    The original structured text script, potentially with factual corrections applied directly to the content of fields like NARRATION_BOX, DIALOGUE, CONCLUSION, etc., while maintaining the identical overall structure.
+
+    Example (if an error in Chapter 1 dialogue was corrected):
+    ```text
+    COMIC_TOPIC: {{topic}}
+    TOTAL_CHAPTERS: 4
+
+    --- CHAPTER 1 ---
+    CHAPTER_NUMBER: 1
+    CHAPTER_TITLE: Chapter 1: Introduction to...
+    NARRATION_BOX: [Narrator sets the scene...]
+    CHAT_BUBBLES:
+    - CHARACTER: Protagonist
+      DIALOGUE: Wow, what is this?
+    - CHARACTER: Guide
+      DIALOGUE: [Corrected factual explanation replacing the original dialogue...]
+    CONCLUSION: [Brief summary of chapter 1's key point]
+    IMAGE_CONTEXT: [2-3 line description of the visual scene, mood, and detail description of charachter which should be influenced with the styles of script]
+
+    # ... rest of the script, potentially with other corrections or unchanged ...
+    ```
+# NEW TASK for JavaScript Coder
+json_conversion_task:
+  description: >
+    Convert the reviewed structured text comic script into a validated JSON format.
+
+    REQUIREMENTS:
+    - Input: Structured text script (following the format output by `script_task`).
+    - Output: A single, valid JSON string.
+    - Accurately map all elements (topic, chapters, titles, narration, chat bubbles, conclusion, image context) from the text structure to the specified JSON structure.
+    - Ensure the output JSON strictly adheres to JSON syntax rules.
+    - The JSON structure should match the previously defined format (with image_context as a string).
+
+  expected_output: >
+    A validated JSON string representing the comic script. The JSON object should have keys like "comic_topic", "total_chapters", and "chapters". The "chapters" key should hold a list of chapter objects, each containing: "chapter_number" (number), "chapter_title" (string), "narration_box" (string), "chat_bubbles" (list of objects with "character" and "dialogue" strings), "conclusion" (string), and "image_context" (string). Example structure snippet:
+    ```json
+    {
+      "comic_topic": "{{topic}}",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_number": 1,
+          "chapter_title": "Chapter 1: Introduction to...",
+          "narration_box": "[Narrator sets the scene...]",
+          "chat_bubbles": [
+            {"character": "Protagonist", "dialogue": "Wow, what is this?"},
+            {"character": "Guide", "dialogue": "This explains the core concept..."}
+          ],
+          "conclusion": "[Brief summary of chapter 1's key point]",
+          "image_context": "[2-3 line description of the visual scene, mood, and key elements for the panel]"
+        },
+        // ... more chapters mapped from text
+      ]
+    }
+    ```
+youtube_shorts_scriptwriter_task:
+  description: >
+    Generate a concise and engaging narration script suitable for a YouTube Short,
+    based *specifically* on the provided comic script content below.
+
+    The narration should:
+    - Directly reflect the key points and flow presented in the comic script.
+    - Align with the educational topic (Gravity in this case).
+    - Be captivating and easy to understand for a general YouTube Shorts audience.
+    - Be formatted as a series of short sentences or phrases, suitable for voiceover timing.
+
+    **Comic Script Content:**
+    ```json
+    {{comic_script}}
+    ```
+
+    Focus *only* on creating the narration text. Do not add introductions or conclusions beyond the narration itself.
+
+  expected_output: >
+    A concise narration script for the YouTube Short, clearly marked with 'NARRATION_SCRIPT:'.
+      Each line should represent a segment of the narration.
+
+      Example Format:
+      NARRATION_SCRIPT:
+      - Ever wonder how plants make their food? It's Photosynthesis!
+      - Plants use sunlight, water, and carbon dioxide to create energy.
+      - Sunlight acts like a spark, starting the process in their leaves.
+      - The result? Oxygen for us and glucose for the plant!
+      - Without photosynthesis, life on Earth wouldn't exist.
+      - It's nature's way of turning light into life!
